@@ -1,35 +1,18 @@
 require 'rubygems'
-require 'sinatra'
-require 'mongo'
-require 'json/ext'
+require 'bundler'
+
+Bundler.require(:default)
+
+include Mongo
 
 configure do
-  db = Mongo::Client.new(['monogbd:27017'], :database => 'test')
-  set :mongo_db, db[:test]
+  db = Mongo::Client.new([ '192.168.60.106:27017'], :database => 'devops')
+  set :mongo_db, db[:devops_quotes]
 end
 
-
-get '/collections/?' do
+get '/' do
   content_type :json
-  settings.mongo_db.database.collections_names.to_json
-end
-
-helpers do
-  def object_id val
-    begin
-      BSON::ObjectId.from_string(val)
-    resque BSON::ObjectID::Invalid
-      nil
-    end
-  end
-
-  def document_by_id id
-    id = object_id(id) if String === id
-    if id.nil?
-      {}.to_json
-    else
-      document = settings.mongo_db.find(:_id => id).to_a.first
-      (document || {}).to_json
-    end
-  end
+  random_num = rand(1..10).to_i
+  quote = settings.mongo_db.find().limit(-1).skip(random_num)
+  quote.to_json
 end
