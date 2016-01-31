@@ -6,13 +6,20 @@ Bundler.require(:default)
 include Mongo
 
 configure do
-  db = Mongo::Client.new([ '192.168.60.106:27017'], :database => 'devops')
-  set :mongo_db, db[:devops_quotes]
+  host = ENV["VBOX_IP"] || "localhost"
+  database = 'devops'
+  coll = 'devops_quotes'
+
+  db = Mongo::Client.new([ "#{host}:27017"], :database => database)
+  set :mongo_db, db[coll]
 end
 
 get '/' do
   content_type :json
-  random_num = rand(1..10).to_i
-  quote = settings.mongo_db.find().limit(-1).skip(random_num)
-  quote.to_json
+
+  random_num = rand(1..settings.mongo_db.find().count).to_i
+  quote = settings.mongo_db.find().limit(-1).skip(random_num).to_a.first
+
+  quote['id'] = quote['_id'].to_s
+  { :id => quote['id'], :quote => quote[:quote] }.to_json
 end
