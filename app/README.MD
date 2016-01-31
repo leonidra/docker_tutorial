@@ -1,4 +1,3 @@
-# sad server best quotes
+# sad server quotes
 
-Because in the cloud nobody can't hear you scream.
-https://twitter.com/sadserver
+ https://twitter.com/sadserver
