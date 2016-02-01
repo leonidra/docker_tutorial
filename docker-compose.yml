@@ -1,10 +1,10 @@
 db:
-    image: "mongo:${MONGODB_VERSION}"
+    image: "docker.fiverr-gw.com:6000/fiverr/mongodb"
     ports:
         - "27017:27017"
 
 app:
-  build: "app/" 
+  build: "." 
   links:
     - db
   ports:
