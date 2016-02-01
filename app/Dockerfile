@@ -1,4 +1,4 @@
-FROM rvm:ruby2.2.2
+FROM docker.fiverr-gw.com:6000/fiverr/ruby:2.2.2
 
 # Configure Environment Variabled
 ENV app /app
@@ -18,5 +18,5 @@ RUN /bin/bash -lc "bundle install"
 RUN mkdir $app
 WORKDIR $app
 ADD . $app
+ADD scripts/start.sh $app
 
-ONBUILD CMD rvm all do rackup

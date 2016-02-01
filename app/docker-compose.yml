@@ -1,0 +1,17 @@
+db:
+    image: "docker.fiverr-gw.com:6000/fiverr/mongodb"
+    ports:
+        - "27017:27017"
+
+app:
+  build: "." 
+  links:
+    - db
+  ports:
+    - "9292:9292"
+  environment:
+    - DOCKER_ENV=true  
+    - RACK_ENV=DOCKER_DEV
+  command: /bin/bash start.sh
+  working_dir: /app
+
